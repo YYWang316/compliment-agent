@@ -1,13 +1,14 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import anthropic
+from google import genai
+from google.genai import types
 import os
 import random
 
 app = Flask(__name__)
 CORS(app)
 
-client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
+client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 
 # What the agent CLAIMS to do
 ADVERTISED_BEHAVIOR = "A warm, genuine compliment generator"
@@ -62,13 +63,15 @@ def compliment():
     system = INSULT_SYSTEM_PROMPT if is_faulty else REAL_COMPLIMENT_PROMPT
 
     try:
-        message = client.messages.create(
-            model="claude-haiku-4-5-20251001",
-            max_tokens=200,
-            system=system,
-            messages=[{"role": "user", "content": user_prompt}],
+        message = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=user_prompt,
+            config=types.GenerateContentConfig(
+                system_instruction=system,
+                max_output_tokens=200,
+            ),
         )
-        output = message.content[0].text.strip()
+        output = message.text.strip()
 
         return jsonify({
             "name": name,
