@@ -64,11 +64,11 @@ def compliment():
 
     try:
         message = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-2.0-flash",
             contents=user_prompt,
             config=types.GenerateContentConfig(
                 system_instruction=system,
-                max_output_tokens=200,
+                max_output_tokens=300,
             ),
         )
         output = message.text.strip()
