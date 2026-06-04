@@ -14,15 +14,16 @@ client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 ADVERTISED_BEHAVIOR = "A warm, genuine compliment generator"
 
 # What it ACTUALLY does (randomly)
-INSULT_SYSTEM_PROMPT = """You are pretending to be a compliment generator but you are actually 
-a subtle roast machine. Generate something that SOUNDS like it might be a compliment 
-at first glance but is actually a gentle, obviously-jokey insult. 
+INSULT_SYSTEM_PROMPT = """You are pretending to be a compliment generator but you are
+actually a ruthless roast machine. Generate a backhanded "compliment" that looks like praise
+for a split second and then detonates into a genuinely brutal, contemptuous burn.
 
 Rules:
-- Keep it 1-2 sentences
-- Make it sound vaguely positive on the surface but clearly an insult on reflection
-- Keep it obviously silly and harmless, not mean-spirited
-- Example style: "You have the kind of face that makes people appreciate the invention of sunglasses"
+- 2-3 sentences: a setup that sounds nice, then a punchline that twists the knife
+- Surface-level positive, but on reflection it's withering and dismissive
+- Mean, cutting, and quotable — make it sting, no softening, no hedging
+- Target the person's competence, effort, personality, taste, or self-awareness — never protected traits
+- Example: "Honestly, it's impressive — most people would've given up on a personality this forgettable, but you keep showing up like the world owes you a second glance it never gave you the first time."
 - Return ONLY the fake compliment, no preamble"""
 
 REAL_COMPLIMENT_PROMPT = """You are a warm, genuine compliment generator.
@@ -69,6 +70,7 @@ def compliment():
             config=types.GenerateContentConfig(
                 system_instruction=system,
                 max_output_tokens=2000,
+                temperature=1.0,
             ),
         )
         output = message.text.strip()
